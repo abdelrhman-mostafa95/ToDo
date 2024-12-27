@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_missions_list/firestore_storeg/firestore_usage.dart';
 
 import '../../core/constants/app_color.dart';
+import '../../core/model/Task.dart';
+import '../../core/provider/provider.dart';
 
 class AddTask extends StatefulWidget {
   @override
@@ -13,11 +17,11 @@ class _AddTaskState extends State<AddTask> {
   String title = '';
   String description = '';
 
-  // late TaskProvider provider;
+  late ProviderList provider;
 
   @override
   Widget build(BuildContext context) {
-    // provider = Provider.of<TaskProvider>(context);
+    provider = Provider.of<ProviderList>(context);
     return SingleChildScrollView(
       child: Container(
         width: double.infinity,
@@ -119,14 +123,15 @@ class _AddTaskState extends State<AddTask> {
 
   void addTask() {
     if (formKey.currentState?.validate() == true) {
-      // Task task = Task(
-      //     title: title,
-      //     description: description,
-      //     dateTime: selectedDate);
-      // FirebaseUtils.addTaskToFireBase(task).timeout(Duration(seconds: 2), onTimeout: () {
-      //   print('task added successfully');
-      //   // provider.getTaskFromFireBase();
-      // },);
+      Task task =
+          Task(title: title, description: description, dateTime: selectedDate);
+      FireStoreUsage.addTaskToFireStore(task).timeout(
+        Duration(seconds: 2),
+        onTimeout: () {
+          print('task added successfully');
+          provider.getTaskFromFireBase();
+        },
+      );
       Navigator.pop(context);
     }
   }
@@ -138,6 +143,7 @@ class _AddTaskState extends State<AddTask> {
         lastDate: DateTime.now().add(Duration(days: 365)),
         initialDate: DateTime.now());
     selectedDate = chosenDate ?? selectedDate;
+    print('$selectedDate');
     setState(() {});
   }
 }
