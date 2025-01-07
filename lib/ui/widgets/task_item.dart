@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_missions_list/core/model/Task.dart';
 import 'package:todo_missions_list/firestore_storeg/firestore_usage.dart';
+import 'package:todo_missions_list/ui/task_tab/edit_task.dart';
 
 import '../../../core/constants/app_color.dart';
 import '../../core/provider/provider.dart';
@@ -10,7 +11,7 @@ import '../../core/provider/provider.dart';
 class TaskItem extends StatefulWidget {
   Task task;
 
-  TaskItem({required this.task});
+  TaskItem({super.key, required this.task});
 
   @override
   State<TaskItem> createState() => _TaskItemState();
@@ -21,7 +22,7 @@ class _TaskItemState extends State<TaskItem> {
   Widget build(BuildContext context) {
     var provider = Provider.of<ProviderList>(context);
     return Container(
-      margin: EdgeInsets.all(12),
+      margin: const EdgeInsets.all(12),
       child: Slidable(
         startActionPane: ActionPane(
           extentRatio: 0.5,
@@ -30,13 +31,13 @@ class _TaskItemState extends State<TaskItem> {
           children: [
             SlidableAction(
               flex: 2,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),
                   bottomLeft: Radius.circular(15)),
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               onPressed: (context) {
                 FireStoreUsage.deleteData(widget.task).timeout(
-                  Duration(seconds: 1),
+                  const Duration(seconds: 1),
                   onTimeout: () => provider.getTaskFromFireBase(),
                 );
               },
@@ -49,12 +50,14 @@ class _TaskItemState extends State<TaskItem> {
               flex: 2,
               padding: EdgeInsets.symmetric(vertical: 20),
               onPressed: (context) {
-                FireStoreUsage.deleteData(widget.task).timeout(
-                  Duration(seconds: 1),
-                  onTimeout: () => provider.getTaskFromFireBase(),
-                );
+                Navigator.of(context)
+                    .pushNamed(EditTask.routeName, arguments: widget.task);
+                provider.getTaskFromFireBase();
+                print('task will edit');
               },
-              backgroundColor: AppColor.primaryColor,
+              backgroundColor: provider.currentTheme == ThemeMode.light
+                  ? AppColor.primaryColor
+                  : AppColor.primaryColorDark,
               foregroundColor: AppColor.whiteColor,
               icon: Icons.edit,
               label: 'Edit',
@@ -64,10 +67,10 @@ class _TaskItemState extends State<TaskItem> {
         child: Container(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
                 topRight: Radius.circular(25),
                 bottomRight: Radius.circular(25)),
-            color: AppColor.whiteColor,
+            color: Colors.transparent,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,7 +79,7 @@ class _TaskItemState extends State<TaskItem> {
                 color: widget.task.isDone
                     ? AppColor.greenColor
                     : AppColor.primaryColor,
-                margin: EdgeInsets.all(12),
+                margin: const EdgeInsets.all(12),
                 width: MediaQuery.of(context).size.width * 0.01,
                 height: MediaQuery.of(context).size.height * 0.09,
               ),
@@ -98,7 +101,9 @@ class _TaskItemState extends State<TaskItem> {
                         fontWeight: FontWeight.w400,
                         fontSize: 15,
                         fontFamily: 'Poppins',
-                        color: AppColor.blackColor),
+                        color: provider.currentTheme == ThemeMode.light
+                            ? AppColor.blackColor
+                            : AppColor.whiteColor),
                   ),
                 ],
               )),
@@ -112,9 +117,10 @@ class _TaskItemState extends State<TaskItem> {
                       isDone: true);
                   print(widget.task.id);
                   print('yes');
-                  FireStoreUsage.updateUser(widget.task);
+                  FireStoreUsage.updateIsDone(widget.task);
                   provider.getTaskFromFireBase();
                   print(widget.task.isDone);
+                  print(widget.task.id);
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(
@@ -123,7 +129,9 @@ class _TaskItemState extends State<TaskItem> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: widget.task.isDone == true
-                        ? AppColor.whiteColor
+                        ? provider.currentTheme == ThemeMode.light
+                            ? AppColor.whiteColor
+                            : AppColor.blackColor
                         : AppColor.primaryColor,
                   ),
                   child: widget.task.isDone == true
@@ -135,7 +143,7 @@ class _TaskItemState extends State<TaskItem> {
                               fontSize: 20,
                               color: AppColor.greenColor),
                         )
-                      : Icon(
+                      : const Icon(
                           Icons.check,
                           color: Colors.white,
                           size: 35,

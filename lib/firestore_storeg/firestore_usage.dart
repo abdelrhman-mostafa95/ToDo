@@ -19,7 +19,7 @@ class FireStoreUsage {
     return taskId.set(task);
   }
 
-  static updateUser(Task task) async {
+  static updateIsDone(Task task) async {
     await getTaskCollection()
         .doc(task.id)
         .update({'isDone': true})
@@ -31,6 +31,19 @@ class FireStoreUsage {
     await getTaskCollection()
         .doc(task.id)
         .delete()
+        .then((value) => print("User Updated "))
+        .catchError((error) => print("Failed to update user: $error"));
+  }
+
+  static updateTask(Task task) async {
+    await getTaskCollection()
+        .doc(task.id)
+        .update({
+          'title': task.title,
+          'description': task.description,
+          'dateTime': task.dateTime,
+          'id': task.id
+        })
         .then((value) => print("User Updated "))
         .catchError((error) => print("Failed to update user: $error"));
   }

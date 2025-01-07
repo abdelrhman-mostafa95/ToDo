@@ -1,9 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_missions_list/core/provider/provider.dart';
+import 'package:todo_missions_list/ui/task_tab/add_task_home_screen.dart';
 
 import '../../core/constants/app_color.dart';
+import '../auth/login.dart';
 import '../settings_tab/settings_tab.dart';
 import '../task_tab/task_tab.dart';
-import '../widgets/add_task.dart';
+import 'drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/';
@@ -15,75 +20,142 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String fullName = "Loading...";
   int selectedIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    fetchFullName();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<ProviderList>(context);
     return Scaffold(
         appBar: AppBar(
-          elevation: 0,
-          toolbarHeight: MediaQuery.of(context).size.height * 0.18,
-          title: Text(
-            'To Do List',
-            style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: AppColor.whiteColor),
-          ),
+          backgroundColor: Colors.transparent,
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            addTaskBottomSheet();
-          },
-          child: Icon(
-            Icons.add,
-            size: 30,
-            color: AppColor.whiteColor,
-          ),
-          backgroundColor: AppColor.primaryColor,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(35),
-              side: BorderSide(color: AppColor.whiteColor, width: 4)),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: ClipRRect(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-          child: BottomAppBar(
-            clipBehavior: Clip.antiAlias,
-            shape: CircularNotchedRectangle(),
-            notchMargin: 8,
-            child: BottomNavigationBar(
-              currentIndex: selectedIndex,
-              onTap: (index) {
-                selectedIndex = index;
-                setState(() {});
-              },
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.list,
-                      size: 22,
-                    ),
-                    label: "Menu"),
-                BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.settings,
-                      size: 22,
-                    ),
-                    label: "Settings"),
+        drawer: Drawer(
+          child: Container(
+            color: provider.currentTheme == ThemeMode.light
+                ? AppColor.backgroundLightColor
+                : AppColor.blackColor,
+            child: ListView(
+              padding: EdgeInsets.all(0),
+              children: [
+                HomeDrawer(),
+                buildDrawer(
+                  provider,
+                  Icons.list_alt,
+                  'Task List',
+                  () {
+                    Navigator.pushNamed(context, TaskTab.routeName);
+                  },
+                ),
+                buildDrawer(
+                  provider,
+                  Icons.settings_outlined,
+                  'Settings',
+                  () {
+                    Navigator.pushNamed(context, SettingsTab.routeName);
+                  },
+                )
               ],
             ),
           ),
         ),
-        body: SafeArea(child: selectedIndex == 0 ? TaskTab() : SettingsTab()));
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                alignment: Alignment.center,
+                child: Text(
+                  'Welcom Back!',
+                  style: TextStyle(
+                      fontFamily: "Pacifico",
+                      color: provider.currentTheme == ThemeMode.light
+                          ? AppColor.blackColor
+                          : AppColor.whiteColor,
+                      fontSize: 40),
+                )),
+            Container(
+                alignment: Alignment.center,
+                child: Text(
+                  fullName,
+                  style: TextStyle(
+                      fontFamily: "Pacifico",
+                      color: provider.currentTheme == ThemeMode.light
+                          ? AppColor.blackColor
+                          : AppColor.whiteColor,
+                      fontSize: 40),
+                )),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.5),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, Login.routeName);
+              },
+              child: Text(
+                'login?!',
+                style: TextStyle(
+                    fontFamily: "Pacifico",
+                    color: provider.currentTheme == ThemeMode.light
+                        ? AppColor.blackColor
+                        : AppColor.whiteColor,
+                    fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, HomeScreenAddTask.routeName);
+              },
+              child: Text(
+                'add task!',
+                style: TextStyle(
+                    fontFamily: "Pacifico",
+                    color: provider.currentTheme == ThemeMode.light
+                        ? AppColor.blackColor
+                        : AppColor.whiteColor,
+                    fontSize: 30),
+              ),
+            )
+          ],
+        ));
   }
 
-  void addTaskBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => AddTask(),
+  buildDrawer(ProviderList provider, IconData icon, String title,
+      void Function() onTap) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: provider.currentTheme == ThemeMode.light
+            ? AppColor.blackColor
+            : AppColor.whiteColor,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontFamily: 'Poppins',
+            fontSize: 20,
+            color: provider.currentTheme == ThemeMode.light
+                ? AppColor.blackColor
+                : AppColor.whiteColor),
+      ),
+      onTap: onTap,
     );
+  }
+
+  void fetchFullName() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        fullName = user.displayName ?? "Guest";
+      });
+    }
   }
 }

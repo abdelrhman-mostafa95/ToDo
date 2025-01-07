@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_missions_list/firestore_storeg/firestore_usage.dart';
+import 'package:todo_missions_list/core/provider/provider.dart';
+import 'package:todo_missions_list/ui/task_tab/task_tab.dart';
 
 import '../../core/constants/app_color.dart';
 import '../../core/model/Task.dart';
-import '../../core/provider/provider.dart';
+import '../../firestore_storeg/firestore_usage.dart';
 
-class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+class HomeScreenAddTask extends StatefulWidget {
+  static const String routeName = 'add task';
+
+  const HomeScreenAddTask({super.key});
 
   @override
-  State<AddTask> createState() => _AddTaskState();
+  State<HomeScreenAddTask> createState() => _HomeScreenAddTaskState();
 }
 
-class _AddTaskState extends State<AddTask> {
+class _HomeScreenAddTaskState extends State<HomeScreenAddTask> {
   var formKey = GlobalKey<FormState>();
   var selectedDate = DateTime.now();
   String title = '';
@@ -24,9 +27,10 @@ class _AddTaskState extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
-    provider = Provider.of<ProviderList>(context);
-    return SingleChildScrollView(
-      child: Container(
+    var provider = Provider.of<ProviderList>(context);
+    return Scaffold(
+      appBar: AppBar(),
+      body: Container(
         height: 800,
         width: double.infinity,
         margin: const EdgeInsets.all(20),
@@ -60,7 +64,7 @@ class _AddTaskState extends State<AddTask> {
                           title = text;
                         },
                         cursorColor: provider.currentTheme == ThemeMode.light
-                            ? AppColor.unSelectedColor
+                            ? AppColor.blackColor
                             : AppColor.whiteColor,
                         style: TextStyle(
                             color: provider.currentTheme == ThemeMode.light
@@ -78,7 +82,7 @@ class _AddTaskState extends State<AddTask> {
                             hintText: 'Enter task Title',
                             hintStyle: TextStyle(
                                 color: provider.currentTheme == ThemeMode.light
-                                    ? AppColor.unSelectedColor
+                                    ? AppColor.darkColor
                                     : AppColor.whiteColor)),
                       ),
                     ),
@@ -114,7 +118,7 @@ class _AddTaskState extends State<AddTask> {
                           hintText: 'Enter task Description',
                           hintStyle: TextStyle(
                               color: provider.currentTheme == ThemeMode.light
-                                  ? AppColor.unSelectedColor
+                                  ? AppColor.darkColor
                                   : AppColor.whiteColor)),
                       maxLines: 2,
                     ),
@@ -148,28 +152,34 @@ class _AddTaskState extends State<AddTask> {
                                 fontSize: 20,
                                 fontFamily: 'Poppins',
                                 color: provider.currentTheme == ThemeMode.light
-                                    ? AppColor.unSelectedColor
+                                    ? AppColor.darkColor
                                     : AppColor.whiteColor)),
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
                     ),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
                           addTask();
+                          Navigator.pushNamed(context, TaskTab.routeName);
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColor.primaryColor),
+                            backgroundColor:
+                                provider.currentTheme == ThemeMode.light
+                                    ? AppColor.backgroundLightColor
+                                    : AppColor.blackColor),
                         child: Text(
-                          'Add',
+                          'add',
                           style: TextStyle(
                               fontWeight: FontWeight.w200,
-                              fontSize: 20,
-                              fontFamily: 'Poppins',
-                              color: AppColor.whiteColor),
+                              fontSize: 30,
+                              fontFamily: 'Pacifico',
+                              color: provider.currentTheme == ThemeMode.light
+                                  ? AppColor.blackColor
+                                  : AppColor.whiteColor),
                         ),
                       ),
                     )
