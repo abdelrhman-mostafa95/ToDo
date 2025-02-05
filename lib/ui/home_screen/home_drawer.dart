@@ -10,33 +10,24 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
-  String fullName = "Loading...";
-
-  @override
-  void initState() {
-    super.initState();
-    fetchFullName();
-  }
-
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<ProviderList>(context);
-    return DrawerHeader(
-      decoration: BoxDecoration(
-        color: provider.currentTheme == ThemeMode.light
-            ? AppColor.backgroundLightColor
-            : AppColor.blackColor,
-      ),
+    return SafeArea(
       child: Column(
         children: [
-          CircleAvatar(
-            backgroundImage: AssetImage('assets/images/mypic.jpg'),
-            radius: 40,
-          ),
+          Text('Hello, MR',style: TextStyle(
+        fontSize: 20,
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w400,
+        color: provider.currentTheme == ThemeMode.light
+            ? AppColor.blackColor
+            : AppColor.whiteColor,
+      )),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.01,
+            height: MediaQuery.of(context).size.height * 0.03,
           ),
-          Text(fullName,
+          Text('AbdelRahman Mostafa',
               style: TextStyle(
                 fontSize: 20,
                 fontFamily: 'Poppins',
@@ -48,14 +39,5 @@ class _HomeDrawerState extends State<HomeDrawer> {
         ],
       ),
     );
-  }
-
-  void fetchFullName() {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      setState(() {
-        fullName = user.displayName ?? "Guest";
-      });
-    }
   }
 }

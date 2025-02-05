@@ -16,7 +16,6 @@ class EditTask extends StatefulWidget {
 }
 
 class _EditTaskState extends State<EditTask> {
-  var formKey = GlobalKey<FormState>();
   var selectedDate = DateTime.now();
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
@@ -48,136 +47,134 @@ class _EditTaskState extends State<EditTask> {
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400),
               ),
-              Form(
-                  key: formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFormField(
-                        cursorColor: provider.currentTheme == ThemeMode.light
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFormField(
+                    cursorColor: provider.currentTheme == ThemeMode.light
+                        ? AppColor.blackColor
+                        : AppColor.whiteColor,
+                    validator: (input) {
+                      if (input == null || input.isEmpty) {
+                        return 'Please, Enter your new task title';
+                      }
+                      return null;
+                    },
+                    initialValue: task.title,
+                    style: TextStyle(
+                        color: provider.currentTheme == ThemeMode.light
                             ? AppColor.blackColor
-                            : AppColor.whiteColor,
-                        validator: (input) {
-                          if (input == null || input.isEmpty) {
-                            return 'Please, Enter your new task title';
-                          }
-                          return null;
-                        },
-                        initialValue: task.title,
-                        style: TextStyle(
-                            color: provider.currentTheme == ThemeMode.light
-                                ? AppColor.blackColor
-                                : AppColor.whiteColor),
-                        onChanged: (value) {
-                          task.title = value;
-                        },
-                        decoration: InputDecoration(
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color:
-                                      provider.currentTheme == ThemeMode.light
-                                          ? AppColor.blackColor
-                                          : AppColor.whiteColor,
-                                  width: 2.0), // Focused underline color
-                            ),
-                            hintText: 'Edit task Title',
-                            hintStyle: TextStyle(
-                                color: provider.currentTheme == ThemeMode.light
-                                    ? AppColor.unSelectedColor
-                                    : AppColor.whiteColor)),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        cursorColor: provider.currentTheme == ThemeMode.light
-                            ? AppColor.blackColor
-                            : AppColor.whiteColor,
-                        validator: (input) {
-                          if (input == null || input.isEmpty) {
-                            return 'Please, Enter your new task description';
-                          }
-                          return null;
-                        },
-                        initialValue: task.description,
-                        style: TextStyle(
-                            color: provider.currentTheme == ThemeMode.light
-                                ? AppColor.blackColor
-                                : AppColor.whiteColor),
-                        onChanged: (value) {
-                          task.description = value;
-                        },
-                        decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: provider.currentTheme == ThemeMode.light
-                                    ? AppColor.blackColor
-                                    : AppColor.whiteColor,
-                                width: 2.0), // Focused underline color
-                          ),
-                        ),
-                        maxLines: 2,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Select time',
-                          style: TextStyle(
-                              color: provider.currentTheme == ThemeMode.light
-                                  ? AppColor.blackColor
-                                  : AppColor.whiteColor,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 20,
-                              fontFamily: 'Poppins'),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          onTap: () {
-                            showData();
-                          },
-                          child: Text(
-                              '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w200,
-                                  fontSize: 20,
-                                  fontFamily: 'Poppins',
-                                  color:
-                                      provider.currentTheme == ThemeMode.light
-                                          ? AppColor.blackColor
-                                          : AppColor.whiteColor)),
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            saveChanges(task);
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
+                            : AppColor.whiteColor),
+                    onChanged: (value) {
+                      task.title = value;
+                    },
+                    decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color:
                                   provider.currentTheme == ThemeMode.light
-                                      ? AppColor.backgroundLightColor
-                                      : AppColor.blackColor),
-                          child: Text(
-                            'Save Changes',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w200,
-                                fontSize: 20,
-                                fontFamily: 'Pacifico',
-                                color: provider.currentTheme == ThemeMode.light
-                                    ? AppColor.blackColor
-                                    : AppColor.whiteColor),
-                          ),
+                                      ? AppColor.blackColor
+                                      : AppColor.whiteColor,
+                              width: 2.0), // Focused underline color
                         ),
-                      )
-                    ],
-                  ))
+                        hintText: 'Edit task Title',
+                        hintStyle: TextStyle(
+                            color: provider.currentTheme == ThemeMode.light
+                                ? AppColor.unSelectedColor
+                                : AppColor.whiteColor)),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    cursorColor: provider.currentTheme == ThemeMode.light
+                        ? AppColor.blackColor
+                        : AppColor.whiteColor,
+                    validator: (input) {
+                      if (input == null || input.isEmpty) {
+                        return 'Please, Enter your new task description';
+                      }
+                      return null;
+                    },
+                    initialValue: task.description,
+                    style: TextStyle(
+                        color: provider.currentTheme == ThemeMode.light
+                            ? AppColor.blackColor
+                            : AppColor.whiteColor),
+                    onChanged: (value) {
+                      task.description = value;
+                    },
+                    decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: provider.currentTheme == ThemeMode.light
+                                ? AppColor.blackColor
+                                : AppColor.whiteColor,
+                            width: 2.0), // Focused underline color
+                      ),
+                    ),
+                    maxLines: 2,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Select time',
+                      style: TextStyle(
+                          color: provider.currentTheme == ThemeMode.light
+                              ? AppColor.blackColor
+                              : AppColor.whiteColor,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 20,
+                          fontFamily: 'Poppins'),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        showData();
+                      },
+                      child: Text(
+                          '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w200,
+                              fontSize: 20,
+                              fontFamily: 'Poppins',
+                              color:
+                                  provider.currentTheme == ThemeMode.light
+                                      ? AppColor.blackColor
+                                      : AppColor.whiteColor)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        saveChanges(task);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              provider.currentTheme == ThemeMode.light
+                                  ? AppColor.backgroundLightColor
+                                  : AppColor.blackColor),
+                      child: Text(
+                        'Save Changes',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w200,
+                            fontSize: 20,
+                            fontFamily: 'Pacifico',
+                            color: provider.currentTheme == ThemeMode.light
+                                ? AppColor.blackColor
+                                : AppColor.whiteColor),
+                      ),
+                    ),
+                  )
+                ],
+              )
             ],
           ),
         ),
@@ -196,7 +193,6 @@ class _EditTaskState extends State<EditTask> {
   }
 
   void saveChanges(Task task) async {
-    if (formKey.currentState?.validate() == true) {
       Task newTask = Task(
           title: title.text,
           description: description.text,
@@ -211,6 +207,5 @@ class _EditTaskState extends State<EditTask> {
           Navigator.pop(context);
         },
       );
-    }
   }
 }

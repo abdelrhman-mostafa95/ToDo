@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_missions_list/core/constants/dialog_utils.dart';
 import 'package:todo_missions_list/ui/auth/login.dart';
-import 'package:todo_missions_list/ui/home_screen/drawer.dart';
+import 'package:todo_missions_list/ui/home_screen/home_drawer.dart';
 import 'package:todo_missions_list/ui/home_screen/home_screen.dart';
-import 'package:todo_missions_list/ui/task_tab/task_tab.dart';
 
 import '../../core/constants/app_color.dart';
 import '../../core/provider/provider.dart';
@@ -108,27 +107,6 @@ class _SignInState extends State<SignIn> {
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.05,
-                  ),
-                  Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, HomeScreen.routeName);
-                          },
-                          child: Text("Welcome Man!!",
-                              style: TextStyle(
-                                  fontFamily: "Pacifico",
-                                  color:
-                                      provider.currentTheme == ThemeMode.light
-                                          ? AppColor.blackColor
-                                          : AppColor.whiteColor,
-                                  fontSize: 30)),
-                        ),
-                      ],
-                    ),
                   ),
                   InkWell(
                     onTap: () {

@@ -10,8 +10,6 @@ import 'package:todo_missions_list/ui/auth/login.dart';
 import 'package:todo_missions_list/ui/auth/signin.dart';
 import 'package:todo_missions_list/ui/home_screen/home_screen.dart';
 import 'package:todo_missions_list/ui/settings_tab/settings_tab.dart';
-import 'package:todo_missions_list/ui/task_tab/add_task_home_screen.dart';
-import 'package:todo_missions_list/ui/task_tab/task_tab.dart';
 import 'package:todo_missions_list/ui/task_tab/edit_task.dart';
 
 void main() async {
@@ -44,12 +42,12 @@ class MyApp extends StatelessWidget {
       routes: {
         HomeScreen.routeName: (_) => const HomeScreen(),
         EditTask.routeName: (_) => const EditTask(),
-        TaskTab.routeName: (_) => const TaskTab(),
         SettingsTab.routeName: (_) => const SettingsTab(),
-        HomeScreenAddTask.routeName: (_) => const HomeScreenAddTask(),
+        // HomeScreenAddTask.routeName: (_) => const HomeScreenAddTask(),
         Login.routeName: (_) => Login(),
         SignIn.routeName: (_) => SignIn(),
       },
+      initialRoute: HomeScreen.routeName,
     );
   }
 }

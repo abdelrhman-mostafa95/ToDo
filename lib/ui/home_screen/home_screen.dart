@@ -1,17 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_missions_list/core/provider/provider.dart';
-import 'package:todo_missions_list/ui/task_tab/add_task_home_screen.dart';
+import 'package:todo_missions_list/ui/auth/login.dart';
+import 'package:todo_missions_list/ui/home_screen/home_drawer.dart';
 
 import '../../core/constants/app_color.dart';
-import '../auth/login.dart';
 import '../settings_tab/settings_tab.dart';
-import '../task_tab/task_tab.dart';
-import 'drawer.dart';
+import '../widgets/add_task.dart';
+import '../widgets/task_item.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const String routeName = '/';
+  static const String routeName = 'taskTab';
 
   const HomeScreen({super.key});
 
@@ -20,113 +20,141 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String fullName = "Loading...";
-  int selectedIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchFullName();
-  }
-
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<ProviderList>(context);
+    if (provider.taskList.isEmpty) {
+      provider.getTaskFromFireBase();
+    }
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          addTaskBottomSheet();
+        },
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(35),
+            side: BorderSide(
+                color: provider.currentTheme == ThemeMode.light
+                    ? AppColor.whiteColor
+                    : AppColor.darkColor,
+                width: 4)),
+        child: Icon(
+          Icons.add,
+          size: 30,
+          color: AppColor.whiteColor,
         ),
-        drawer: Drawer(
-          child: Container(
-            color: provider.currentTheme == ThemeMode.light
-                ? AppColor.backgroundLightColor
-                : AppColor.blackColor,
-            child: ListView(
-              padding: EdgeInsets.all(0),
-              children: [
-                HomeDrawer(),
-                buildDrawer(
-                  provider,
-                  Icons.list_alt,
-                  'Task List',
-                  () {
-                    Navigator.pushNamed(context, TaskTab.routeName);
-                  },
-                ),
-                buildDrawer(
-                  provider,
-                  Icons.settings_outlined,
-                  'Settings',
-                  () {
-                    Navigator.pushNamed(context, SettingsTab.routeName);
-                  },
-                )
-              ],
-            ),
+      ),
+      drawer: Drawer(
+        child: Container(
+          padding: EdgeInsets.only(top: 12),
+          color: provider.currentTheme == ThemeMode.light
+              ? AppColor.backgroundLightColor
+              : AppColor.blackColor,
+          child: ListView(
+            padding: EdgeInsets.all(0),
+            children: [
+              HomeDrawer(),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              buildDrawer(
+                provider,
+                Icons.list_alt,
+                'Task List',
+                    () {
+                  Navigator.pushNamed(context, HomeScreen.routeName);
+                },
+              ),
+              buildDrawer(
+                provider,
+                Icons.settings_outlined,
+                'Settings',
+                    () {
+                  Navigator.pushNamed(context, SettingsTab.routeName);
+                },
+              ),
+              buildDrawer(
+                provider,
+                Icons.login,
+                'Login',
+                    () {
+                  Navigator.pushNamed(context, Login.routeName);
+                },
+              )
+            ],
           ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+      ),
+      body: SafeArea(
+        child: Column(
           children: [
-            Container(
-                alignment: Alignment.center,
-                child: Text(
-                  'Welcom Back!',
-                  style: TextStyle(
-                      fontFamily: "Pacifico",
+            EasyDateTimeLine(
+              locale: 'en',
+              initialDate: provider.selectedDate,
+              onDateChange: (selectedDate) {
+                provider.changeSelectedDate(selectedDate);
+              },
+              headerProps: EasyHeaderProps(
+                  monthStyle: TextStyle(
                       color: provider.currentTheme == ThemeMode.light
                           ? AppColor.blackColor
-                          : AppColor.whiteColor,
-                      fontSize: 40),
-                )),
-            Container(
-                alignment: Alignment.center,
-                child: Text(
-                  fullName,
-                  style: TextStyle(
-                      fontFamily: "Pacifico",
+                          : AppColor.whiteColor),
+                  selectedDateStyle: TextStyle(
                       color: provider.currentTheme == ThemeMode.light
                           ? AppColor.blackColor
-                          : AppColor.whiteColor,
-                      fontSize: 40),
-                )),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.5),
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, Login.routeName);
-              },
-              child: Text(
-                'login?!',
-                style: TextStyle(
-                    fontFamily: "Pacifico",
-                    color: provider.currentTheme == ThemeMode.light
-                        ? AppColor.blackColor
-                        : AppColor.whiteColor,
-                    fontSize: 20),
+                          : AppColor.whiteColor),
+                  dateFormatter: DateFormatter.fullDateMDY(),
+                  showMonthPicker: true,
+                  showSelectedDate: true,
+                  showHeader: true,
+                  monthPickerType: MonthPickerType.dropDown),
+              dayProps: EasyDayProps(
+                todayHighlightColor: provider.currentTheme == ThemeMode.light
+                    ? AppColor.blackColor
+                    : AppColor.whiteColor,
+                borderColor: Colors.white,
+                dayStructure: DayStructure.monthDayNumDayStr,
+                activeDayStyle: DayStyle(
+                  dayStrStyle: TextStyle(
+                      color: provider.currentTheme == ThemeMode.light
+                          ? AppColor.blackColor
+                          : AppColor.whiteColor),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        AppColor.blackColor,
+                        AppColor.backgroundLightColor,
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, HomeScreenAddTask.routeName);
-              },
-              child: Text(
-                'add task!',
-                style: TextStyle(
-                    fontFamily: "Pacifico",
-                    color: provider.currentTheme == ThemeMode.light
-                        ? AppColor.blackColor
-                        : AppColor.whiteColor,
-                    fontSize: 30),
-              ),
-            )
+            Expanded(
+                child: ListView.builder(
+                    itemCount: provider.taskList.length,
+                    itemBuilder: (context, index) => TaskItem(
+                      task: provider.taskList[index],
+                    )))
           ],
-        ));
+        ),
+      ),
+    );
   }
 
+  void addTaskBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => AddTask(),
+    );
+  }
   buildDrawer(ProviderList provider, IconData icon, String title,
       void Function() onTap) {
     return ListTile(
@@ -150,12 +178,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void fetchFullName() {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      setState(() {
-        fullName = user.displayName ?? "Guest";
-      });
-    }
-  }
 }

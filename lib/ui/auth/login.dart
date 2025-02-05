@@ -94,32 +94,46 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.05,
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Text("You don't have an account ?",
+                  Row(
+                    children: [
+                      Text("You don't have an account ?",
+                          style: TextStyle(
+                              fontFamily: "Poppins",
+                              color: provider.currentTheme == ThemeMode.light
+                                  ? AppColor.blackColor
+                                  : AppColor.whiteColor,
+                              fontSize: 12)),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, SignIn.routeName);
+                        },
+                        child: Text(" Create account!",
                             style: TextStyle(
                                 fontFamily: "Poppins",
-                                color: provider.currentTheme == ThemeMode.light
-                                    ? AppColor.blackColor
-                                    : AppColor.whiteColor,
+                                color:
+                                    provider.currentTheme == ThemeMode.light
+                                        ? AppColor.blackColor
+                                        : AppColor.whiteColor,
                                 fontSize: 12)),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, SignIn.routeName);
-                          },
-                          child: Text(" Create account!",
-                              style: TextStyle(
-                                  fontFamily: "Poppins",
-                                  color:
-                                      provider.currentTheme == ThemeMode.light
-                                          ? AppColor.blackColor
-                                          : AppColor.whiteColor,
-                                  fontSize: 12)),
-                        ),
-                      ],
-                    ),
-                  )
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // validatorTestField();
+                      Navigator.pushNamed(context, HomeScreen.routeName);
+                    },
+                    child: Text("Home",
+                        style: TextStyle(
+                            fontFamily: "Pacifico",
+                            color: provider.currentTheme == ThemeMode.light
+                                ? AppColor.blackColor
+                                : AppColor.whiteColor,
+                            fontSize: 20)),
+                  ),
                 ],
               ),
             ),
@@ -142,7 +156,7 @@ class _LoginState extends State<Login> {
             message: 'Login Successfully.',
             posActionName: 'Ok',
             posAction: () {
-              Navigator.pushNamed(context, HomeScreen.routeName);
+
             });
         print(credential.user?.displayName ?? '');
       } on FirebaseAuthException catch (e) {
