@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todo_missions_list/core/model/Task.dart';
+import 'package:todo_missions_list/core/model/my_user.dart';
 
 class FireStoreUsage {
   static CollectionReference<Task> getTaskCollection() {
@@ -46,5 +47,19 @@ class FireStoreUsage {
         })
         .then((value) => print("User Updated "))
         .catchError((error) => print("Failed to update user: $error"));
+  }
+
+  static CollectionReference<MyUser> getUserCollection() {
+    return FirebaseFirestore.instance
+        .collection(MyUser.collectionName)
+        .withConverter<MyUser>(
+          fromFirestore: (snapshot, options) =>
+              MyUser.fromFireStore(snapshot.data()!),
+          toFirestore: (user, options) => user.toFireStore(),
+        );
+  }
+
+  static Future<void> addUserToFireStore(MyUser myUser){
+    return getUserCollection().doc(myUser.id).set(myUser);
   }
 }

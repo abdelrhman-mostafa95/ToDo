@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_missions_list/core/constants/dialog_utils.dart';
+import 'package:todo_missions_list/core/model/my_user.dart';
+import 'package:todo_missions_list/firestore_storeg/firestore_usage.dart';
 import 'package:todo_missions_list/ui/auth/login.dart';
 import 'package:todo_missions_list/ui/home_screen/home_drawer.dart';
 import 'package:todo_missions_list/ui/home_screen/home_screen.dart';
@@ -138,15 +140,10 @@ class _SignInState extends State<SignIn> {
           email: emailController.text,
           password: passwordController.text,
         );
-        print(emailController.text);
-        User? user = credential.user;
-        if (user != null) {
-          await user.updateProfile(displayName: fullNameController.text);
-          print(fullNameController.text);
-          await user.reload(); // Reload user to apply changes
-          user = FirebaseAuth.instance.currentUser;
-          print("User registered with full name: ${user?.displayName}");
-        }
+        MyUser myUser = MyUser(id: credential.user?.uid ?? '',
+            fullName: fullNameController.text,
+            email: emailController.text);
+        await FireStoreUsage.addUserToFireStore(myUser);
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(
             context: context,
@@ -155,7 +152,6 @@ class _SignInState extends State<SignIn> {
             posAction: () {
               Navigator.pushNamed(context, HomeScreen.routeName);
             });
-        print(user?.uid ?? '');
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           DialogUtils.hideLoading(context);

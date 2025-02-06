@@ -22,7 +22,7 @@ void main() async {
               messagingSenderId: '361704001394',
               projectId: 'todo-missions'))
       : await Firebase.initializeApp();
-  await FirebaseFirestore.instance.disableNetwork();
+  // await FirebaseFirestore.instance.disableNetwork();
   runApp(ChangeNotifierProvider(
       create: (context) => ProviderList()..getTheme(), child: const MyApp()));
 }
