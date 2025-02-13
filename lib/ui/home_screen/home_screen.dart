@@ -86,6 +86,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     () {
                   Navigator.pushNamed(context, Login.routeName);
                 },
+              ),
+              buildDrawer(
+                provider,
+                Icons.logout,
+                'Logout',
+                    () {
+                  provider.taskList = [];
+                  authProvider.currentUser = null;
+                  Navigator.pushNamed(context, Login.routeName);
+                },
               )
             ],
           ),
