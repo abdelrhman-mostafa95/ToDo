@@ -6,6 +6,7 @@ import 'package:todo_missions_list/firestore_storeg/firestore_usage.dart';
 import 'package:todo_missions_list/ui/task_tab/edit_task.dart';
 
 import '../../../core/constants/app_color.dart';
+import '../../core/provider/auth_provider.dart';
 import '../../core/provider/provider.dart';
 
 class TaskItem extends StatefulWidget {
@@ -20,6 +21,7 @@ class TaskItem extends StatefulWidget {
 class _TaskItemState extends State<TaskItem> {
   @override
   Widget build(BuildContext context) {
+    var authProvider = Provider.of<AuthUserProvider>(context);
     var provider = Provider.of<ProviderList>(context);
     return Container(
       margin: const EdgeInsets.all(12),
@@ -36,9 +38,9 @@ class _TaskItemState extends State<TaskItem> {
                   bottomLeft: Radius.circular(15)),
               padding: const EdgeInsets.symmetric(vertical: 20),
               onPressed: (context) {
-                FireStoreUsage.deleteData(widget.task).timeout(
+                FireStoreUsage.deleteData(widget.task,authProvider.currentUser?.id?? '').timeout(
                   const Duration(seconds: 1),
-                  onTimeout: () => provider.getTaskFromFireBase(),
+                  onTimeout: () => provider.getTaskFromFireBase(authProvider.currentUser?.id?? ''),
                 );
               },
               backgroundColor: AppColor.redColor,
@@ -52,7 +54,7 @@ class _TaskItemState extends State<TaskItem> {
               onPressed: (context) {
                 Navigator.of(context)
                     .pushNamed(EditTask.routeName, arguments: widget.task);
-                provider.getTaskFromFireBase();
+                provider.getTaskFromFireBase(authProvider.currentUser?.id?? '');
                 print('task will edit');
               },
               backgroundColor: provider.currentTheme == ThemeMode.light
@@ -117,8 +119,8 @@ class _TaskItemState extends State<TaskItem> {
                       isDone: true);
                   print(widget.task.id);
                   print('yes');
-                  FireStoreUsage.updateIsDone(widget.task);
-                  provider.getTaskFromFireBase();
+                  FireStoreUsage.updateIsDone(widget.task,authProvider.currentUser?.id?? '');
+                  provider.getTaskFromFireBase(authProvider.currentUser?.id?? '');
                   print(widget.task.isDone);
                   print(widget.task.id);
                 },

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/constants/app_color.dart';
 import '../../core/model/Task.dart';
+import '../../core/provider/auth_provider.dart';
 import '../../core/provider/provider.dart';
 import '../../firestore_storeg/firestore_usage.dart';
 
@@ -193,16 +194,17 @@ class _EditTaskState extends State<EditTask> {
   }
 
   void saveChanges(Task task) async {
+    var authProvider = Provider.of<AuthUserProvider>(context);
       Task newTask = Task(
           title: title.text,
           description: description.text,
           dateTime: selectedDate,
           id: task.id);
       print(task.id);
-      await FireStoreUsage.updateTask(newTask).timeout(
+      await FireStoreUsage.updateTask(newTask,authProvider.currentUser?.id?? '').timeout(
         const Duration(seconds: 2),
         onTimeout: () {
-          provider.getTaskFromFireBase();
+          provider.getTaskFromFireBase(authProvider.currentUser?.id?? '');
           print(task.id);
           Navigator.pop(context);
         },

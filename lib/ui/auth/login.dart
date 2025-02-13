@@ -2,12 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_missions_list/core/constants/dialog_utils.dart';
+import 'package:todo_missions_list/core/model/my_user.dart';
 import 'package:todo_missions_list/core/provider/provider.dart';
+import 'package:todo_missions_list/firestore_storeg/firestore_usage.dart';
 import 'package:todo_missions_list/ui/auth/signin.dart';
 import 'package:todo_missions_list/ui/home_screen/home_screen.dart';
 import 'package:todo_missions_list/ui/widgets/custom_test_form_field.dart';
 
 import '../../core/constants/app_color.dart';
+import '../../core/provider/auth_provider.dart';
 
 class Login extends StatefulWidget {
   static const String routeName = 'Login';
@@ -150,6 +153,12 @@ class _LoginState extends State<Login> {
         final credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
                 email: emailController.text, password: passwordController.text);
+        var user = await FireStoreUsage.readUserFromFireBase(credential.user?.uid ?? '');
+        if(user == null){
+          return;
+        }
+        var authProvider = Provider.of<AuthUserProvider>(context, listen: false);
+        authProvider.updateUser(user);
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(
             context: context,

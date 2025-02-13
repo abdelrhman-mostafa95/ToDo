@@ -5,10 +5,10 @@ import 'package:todo_missions_list/core/constants/dialog_utils.dart';
 import 'package:todo_missions_list/core/model/my_user.dart';
 import 'package:todo_missions_list/firestore_storeg/firestore_usage.dart';
 import 'package:todo_missions_list/ui/auth/login.dart';
-import 'package:todo_missions_list/ui/home_screen/home_drawer.dart';
 import 'package:todo_missions_list/ui/home_screen/home_screen.dart';
 
 import '../../core/constants/app_color.dart';
+import '../../core/provider/auth_provider.dart';
 import '../../core/provider/provider.dart';
 import '../widgets/custom_test_form_field.dart';
 
@@ -29,6 +29,7 @@ class _SignInState extends State<SignIn> {
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +141,7 @@ class _SignInState extends State<SignIn> {
           email: emailController.text,
           password: passwordController.text,
         );
+
         MyUser myUser = MyUser(id: credential.user?.uid ?? '',
             fullName: fullNameController.text,
             email: emailController.text);

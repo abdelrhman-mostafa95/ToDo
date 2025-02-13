@@ -6,6 +6,7 @@ import 'package:todo_missions_list/ui/auth/login.dart';
 import 'package:todo_missions_list/ui/home_screen/home_drawer.dart';
 
 import '../../core/constants/app_color.dart';
+import '../../core/provider/auth_provider.dart';
 import '../settings_tab/settings_tab.dart';
 import '../widgets/add_task.dart';
 import '../widgets/task_item.dart';
@@ -22,9 +23,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    var authProvider = Provider.of<AuthUserProvider>(context);
     var provider = Provider.of<ProviderList>(context);
     if (provider.taskList.isEmpty) {
-      provider.getTaskFromFireBase();
+      provider.getTaskFromFireBase(authProvider.currentUser?.id?? '');
     }
     return Scaffold(
       appBar: AppBar(
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
               locale: 'en',
               initialDate: provider.selectedDate,
               onDateChange: (selectedDate) {
-                provider.changeSelectedDate(selectedDate);
+                provider.changeSelectedDate(selectedDate,authProvider.currentUser?.id?? '');
               },
               headerProps: EasyHeaderProps(
                   monthStyle: TextStyle(

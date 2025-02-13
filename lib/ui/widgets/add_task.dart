@@ -4,6 +4,7 @@ import 'package:todo_missions_list/firestore_storeg/firestore_usage.dart';
 
 import '../../core/constants/app_color.dart';
 import '../../core/model/Task.dart';
+import '../../core/provider/auth_provider.dart';
 import '../../core/provider/provider.dart';
 
 class AddTask extends StatefulWidget {
@@ -179,17 +180,23 @@ class _AddTaskState extends State<AddTask> {
   }
 
   void addTask() {
+    var authProvider = Provider.of<AuthUserProvider>(context, listen: false);
       Task task =
           Task(title: title, description: description, dateTime: selectedDate);
-      FireStoreUsage.addTaskToFireStore(task).timeout(
-        const Duration(seconds: 2),
-        onTimeout: () {
-          print('task added successfully');
-          provider.getTaskFromFireBase();
-          print(task);
-          print(task.dateTime);
-        },
-      );
+      print("I'm enter");
+      FireStoreUsage.addTaskToFireStore(task,authProvider.currentUser?.id?? '').then((value) {
+        print('task added successfully');
+        provider.getTaskFromFireBase(authProvider.currentUser?.id?? '');
+      },);
+      //     .timeout(
+      //   const Duration(seconds: 2),
+      //   onTimeout: () {
+      //     print('task added successfully');
+      //     provider.getTaskFromFireBase(authProvider.currentUser?.id?? '');
+      //     print(task);
+      //     print(task.dateTime);
+      //   },
+      // );
       Navigator.pop(context);
   }
 

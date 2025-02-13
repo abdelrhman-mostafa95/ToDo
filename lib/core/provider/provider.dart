@@ -11,9 +11,9 @@ class ProviderList extends ChangeNotifier {
   DateTime selectedDate = DateTime.now();
   ThemeMode currentTheme = ThemeMode.light;
 
-  void getTaskFromFireBase() async {
+  void getTaskFromFireBase( String uId) async {
     QuerySnapshot<Task> querySnapshot =
-        await FireStoreUsage.getTaskCollection().get();
+        await FireStoreUsage.getTaskCollection(uId).get();
     taskList = querySnapshot.docs.map(
       (doc) {
         return doc.data();
@@ -34,9 +34,9 @@ class ProviderList extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeSelectedDate(DateTime newSelectedDate) {
+  void changeSelectedDate(DateTime newSelectedDate, String uId) {
     selectedDate = newSelectedDate;
-    getTaskFromFireBase();
+    getTaskFromFireBase(uId);
   }
 
   changeThemeMode(ThemeMode newTheme) {
