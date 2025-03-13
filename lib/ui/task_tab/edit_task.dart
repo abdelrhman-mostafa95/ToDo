@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_missions_list/ui/home_screen/home_screen.dart';
 
 import '../../core/constants/app_color.dart';
 import '../../core/model/Task.dart';
@@ -156,6 +157,7 @@ class _EditTaskState extends State<EditTask> {
                     child: ElevatedButton(
                       onPressed: () async {
                         saveChanges(task);
+                        Navigator.pushNamed(context, HomeScreen.routeName);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor:
@@ -194,7 +196,7 @@ class _EditTaskState extends State<EditTask> {
   }
 
   void saveChanges(Task task) async {
-    var authProvider = Provider.of<AuthUserProvider>(context);
+    var authProvider = Provider.of<AuthUserProvider>(context, listen: false);
       Task newTask = Task(
           title: title.text,
           description: description.text,

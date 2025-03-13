@@ -25,7 +25,6 @@ class ProviderList extends ChangeNotifier {
         if (selectedDate.day == task.dateTime.day &&
             selectedDate.month == task.dateTime.month &&
             selectedDate.year == task.dateTime.year) {
-          print('Iam in true');
           return true;
         }
         return false;

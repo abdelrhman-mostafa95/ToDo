@@ -110,20 +110,24 @@ class _HomeScreenState extends State<HomeScreen> {
               onDateChange: (selectedDate) {
                 provider.changeSelectedDate(selectedDate,authProvider.currentUser?.id?? '');
               },
+
               headerProps: EasyHeaderProps(
+
                   monthStyle: TextStyle(
                       color: provider.currentTheme == ThemeMode.light
                           ? AppColor.blackColor
                           : AppColor.whiteColor),
                   selectedDateStyle: TextStyle(
-                      color: provider.currentTheme == ThemeMode.light
+                      color:provider.currentTheme == ThemeMode.light
                           ? AppColor.blackColor
-                          : AppColor.whiteColor),
+                          : AppColor.whiteColor
+                  ),
                   dateFormatter: DateFormatter.fullDateMDY(),
                   showMonthPicker: true,
                   showSelectedDate: true,
                   showHeader: true,
-                  monthPickerType: MonthPickerType.dropDown),
+                  monthPickerType: MonthPickerType.switcher
+              ),
               dayProps: EasyDayProps(
                 todayHighlightColor: provider.currentTheme == ThemeMode.light
                     ? AppColor.blackColor

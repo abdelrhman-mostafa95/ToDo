@@ -39,7 +39,7 @@ class _TaskItemState extends State<TaskItem> {
               padding: const EdgeInsets.symmetric(vertical: 20),
               onPressed: (context) {
                 FireStoreUsage.deleteData(widget.task,authProvider.currentUser?.id?? '').timeout(
-                  const Duration(seconds: 1),
+                  const Duration(milliseconds: 30),
                   onTimeout: () => provider.getTaskFromFireBase(authProvider.currentUser?.id?? ''),
                 );
               },

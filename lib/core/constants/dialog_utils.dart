@@ -44,7 +44,7 @@ class DialogUtils {
       Function? posAction,
       String? negActionName,
       Function? negAction,
-      bool boolDismissible = false}) {
+      bool boolDismissible = true}) {
     List<Widget> actions = [];
     if (posActionName != null) {
       actions.add(TextButton(

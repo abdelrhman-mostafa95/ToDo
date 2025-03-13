@@ -165,7 +165,7 @@ class _LoginState extends State<Login> {
             message: 'Login Successfully.',
             posActionName: 'Ok',
             posAction: () {
-
+              Navigator.pushNamed(context, HomeScreen.routeName);
             });
         print(credential.user?.displayName ?? '');
       } on FirebaseAuthException catch (e) {
@@ -181,10 +181,11 @@ class _LoginState extends State<Login> {
               message: 'Wrong password provided for that user.');
           print('Wrong password provided for that user.');
         }
-      } catch (e) {
-        DialogUtils.hideLoading(context);
-        DialogUtils.showMessage(context: context, message: e.toString());
-        print(e.toString());
+        else  {
+          DialogUtils.hideLoading(context);
+          DialogUtils.showMessage(context: context, message: e.code.toString());
+          print(e.toString());
+        }
       }
     }
   }
