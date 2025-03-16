@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:todo_missions_list/core/provider/auth_provider.dart';
 import 'package:todo_missions_list/core/provider/provider.dart';
 import 'package:todo_missions_list/core/theme/my_theme.dart';
-import 'package:todo_missions_list/ui/auth/login.dart';
-import 'package:todo_missions_list/ui/auth/signin.dart';
+import 'package:todo_missions_list/ui/auth/log_in/login.dart';
+import 'package:todo_missions_list/ui/auth/sign_up/sign_up.dart';
 import 'package:todo_missions_list/ui/home_screen/home_screen.dart';
 import 'package:todo_missions_list/ui/settings_tab/settings_tab.dart';
 import 'package:todo_missions_list/ui/task_tab/edit_task.dart';
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         SettingsTab.routeName: (_) => const SettingsTab(),
         // HomeScreenAddTask.routeName: (_) => const HomeScreenAddTask(),
         Login.routeName: (_) => Login(),
-        SignIn.routeName: (_) => SignIn(),
+        SignUp.routeName: (_) => SignUp(),
       },
       initialRoute: HomeScreen.routeName,
     );

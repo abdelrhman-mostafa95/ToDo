@@ -2,7 +2,7 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_missions_list/core/provider/provider.dart';
-import 'package:todo_missions_list/ui/auth/login.dart';
+import 'package:todo_missions_list/ui/auth/log_in/login.dart';
 import 'package:todo_missions_list/ui/home_screen/home_drawer.dart';
 
 import '../../core/constants/app_color.dart';
