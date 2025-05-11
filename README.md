@@ -1,16 +1,39 @@
-# todo_missions_list
+Firebase Configuration
 
-todo app with private calender
+Ensure that Firebase Authentication is enabled for Email/Password.
 
-## Getting Started
+Create Firestore collections for storing user tasks.
 
-This project is a starting point for a Flutter application.
+Firestore structure example:
 
-A few resources to get you started if this is your first Flutter project:
+users
+  └── userId
+        └── tasks
+              ├── taskId
+                  └── {title, description, date, isDone}
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+📸 Details
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Login Screen: User authentication via Firebase.
+
+Task List: Display all tasks with status indicators.
+
+Task Editor: Add, update, and delete tasks.
+
+Dark and Light Themes: User-controlled theme switching.
+
+🤝 Contributing
+
+Fork the repository.
+
+Create a new branch (feature/new-feature).
+
+Commit changes.
+
+Push to the branch.
+
+Create a Pull Request.
+
+📧 Contact
+
+For any questions or suggestions, feel free to reach out at [Your Email Address].
