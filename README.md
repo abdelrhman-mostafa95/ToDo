@@ -1,4 +1,32 @@
-Firebase Configuration
+✅ TaskMaster - Your Ultimate ToDo Manager
+
+A feature-rich ToDo application built using Flutter and Firebase, allowing users to manage their tasks efficiently with authentication, task management, and theme customization.
+
+✨ Features
+
+User Authentication: Log in and log out using Firebase Authentication.
+
+Task Management: Add, update, delete, and mark tasks as done.
+
+Date Selection: Schedule tasks for specific dates.
+
+Theme Support: Switch between Light and Dark themes.
+
+User-Specific Data: Each user's tasks are stored separately in Firebase Firestore.
+
+🛠️ Technologies Used
+
+Flutter
+
+Firebase Authentication
+
+Firebase Firestore
+
+Provider (for state management)
+
+SharedPreferences (for theme persistence)
+
+📝 Firebase Configuration
 
 Ensure that Firebase Authentication is enabled for Email/Password.
 
@@ -11,29 +39,3 @@ users
         └── tasks
               ├── taskId
                   └── {title, description, date, isDone}
-
-📸 Details
-
-Login Screen: User authentication via Firebase.
-
-Task List: Display all tasks with status indicators.
-
-Task Editor: Add, update, and delete tasks.
-
-Dark and Light Themes: User-controlled theme switching.
-
-🤝 Contributing
-
-Fork the repository.
-
-Create a new branch (feature/new-feature).
-
-Commit changes.
-
-Push to the branch.
-
-Create a Pull Request.
-
-📧 Contact
-
-For any questions or suggestions, feel free to reach out at [Your Email Address].
